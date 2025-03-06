@@ -1,7 +1,7 @@
 {
-  "name": "work_schedule",
+  "name": "impulse-tracker",
   "version": "0.1.0",
-  "homepage": "https://m-ruzhynskyi.github.io/impulse-tracker",
+  "homepage": "https://j079-rzyt.github.io/j079",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.14.0",
