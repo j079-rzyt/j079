@@ -4,6 +4,7 @@ import { auth, db } from "../firebase/config";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import { useDateRange } from "../hooks/useDateRange";
 import { formatDate, getRangeId } from "../functions/dateUtils";
+import ComplexStat from "../Components/ComplexStat";
 
 export default function UserMain() {
   const userEmail = auth.currentUser?.email.split("@")[0];
@@ -31,7 +32,6 @@ export default function UserMain() {
 
       if (docSnap.exists()) {
         const data = docSnap.data();
-        console.log("Получены данные из Firebase:", data);
 
         const productList = Object.entries(data)
           .map(([name, priceStr]) => {
@@ -39,8 +39,6 @@ export default function UserMain() {
             return { name, price };
           })
           .filter((product) => !isNaN(product.price));
-
-        console.log("Распарсенные товары:", productList);
 
         setProducts(productList);
 
@@ -119,7 +117,6 @@ export default function UserMain() {
       currentDate.setHours(0, 0, 0, 0);
 
       if (currentDate < startDate || currentDate > endDate) {
-        console.log("Current date is outside the active range");
         return;
       }
 
@@ -149,7 +146,6 @@ export default function UserMain() {
         fact: newFact,
       });
 
-      console.log(`Updated fact for ${formattedDate} to ${newFact}`);
       setFactUpdated(true);
     } catch (error) {
       console.error("Error updating fact:", error);
@@ -240,18 +236,18 @@ export default function UserMain() {
               <div className="user-main__cell two-buttons">
                 <button
                   className="user-main__button"
-                  onClick={() => handleOperation(product.name, true)}
+                  onClick={() => handleOperation(product.name, false)}
                 >
-                  +
+                  -
                 </button>
                 <p className="user-main__count">
                   {productCounts[product.name] || 0}
                 </p>
                 <button
                   className="user-main__button"
-                  onClick={() => handleOperation(product.name, false)}
+                  onClick={() => handleOperation(product.name, true)}
                 >
-                  -
+                  +
                 </button>
               </div>
               <p className="user-main__cell">
@@ -265,6 +261,7 @@ export default function UserMain() {
           </p>
         </div>
       )}
+      <ComplexStat/>
     </section>
   );
 }
